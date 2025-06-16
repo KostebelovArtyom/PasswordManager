@@ -32,3 +32,16 @@ def add_entry(link_res: str, login: str) -> None:
     conn.commit()
     cursor.close()
     conn.close()
+
+def rem_entry(ident: str) -> None:
+    dbconfig = {'host':'127.0.0.1',
+                'user':'PassMan',
+                'password':'qwe123',
+                'database':'passmandb'}
+    conn = mysql.connector.connect(**dbconfig)
+    cursor = conn.cursor()
+    _SQL = """DELETE FROM storage WHERE id = %s"""
+    cursor.execute(_SQL, (ident,))
+    conn.commit()
+    cursor.close()
+    conn.close()
