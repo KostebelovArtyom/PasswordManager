@@ -1,8 +1,13 @@
 import random
 import string
-import mysql.connector
+from DBcm import UseDatabase
 
 storage = {}
+
+dbconfig = {'host':'127.0.0.1',
+            'user':'PassMan',
+            'password':'qwe123',
+            'database':'passmandb'}
     
 def passwd_gen() -> str:
     total = string.ascii_letters + string.digits + string.punctuation
@@ -18,30 +23,14 @@ def remuser(username: str) -> None:
 
 def add_entry(link_res: str, login: str) -> None:
     password = passwd_gen()
-    dbconfig = {'host':'127.0.0.1',
-                'user':'PassMan',
-                'password':'qwe123',
-                'database':'passmandb'}
-    conn = mysql.connector.connect(**dbconfig)
-    cursor = conn.cursor()
-    _SQL = """insert into storage
-              (link, login, password)
-              values
-              (%s, %s, %s)"""
-    cursor.execute(_SQL, (link_res, login, password))
-    conn.commit()
-    cursor.close()
-    conn.close()
+    with UseDatabase(dbconfig) as cursor:
+        _SQL = """insert into storage
+                  (link, login, password)
+                  values
+                  (%s, %s, %s)"""
+        cursor.execute(_SQL, (link_res, login, password))
 
 def rem_entry(ident: str) -> None:
-    dbconfig = {'host':'127.0.0.1',
-                'user':'PassMan',
-                'password':'qwe123',
-                'database':'passmandb'}
-    conn = mysql.connector.connect(**dbconfig)
-    cursor = conn.cursor()
-    _SQL = """DELETE FROM storage WHERE id = %s"""
-    cursor.execute(_SQL, (ident,))
-    conn.commit()
-    cursor.close()
-    conn.close()
+    with UseDatabase(dbconfig) as cursor:
+        _SQL = """DELETE FROM storage WHERE id = %s"""
+        cursor.execute(_SQL, (ident,))
