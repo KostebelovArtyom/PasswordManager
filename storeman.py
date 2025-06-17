@@ -1,4 +1,4 @@
-import random
+import secrets
 import string
 from DBcm import UseDatabase
 
@@ -7,6 +7,13 @@ dbconfig = {'host':'127.0.0.1',
             'password':'qwe123',
             'database':'passmandb'}
 
+def passwd_gen():
+    total = string.ascii_letters + string.punctuation + string.digits
+    val = ''
+    for i in range(16):
+        val += secrets.choice(total)
+    return val
+    
 class StorContol:
     def add_entry(link_res: str, login: str) -> None:
         password = passwd_gen()
