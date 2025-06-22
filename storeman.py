@@ -28,7 +28,7 @@ class StoreContol:
                       (%s, %s, %s)"""
             cursor.execute(_SQL, (link_res, login, password))
 
-    def rem_entry(self, ident: int) -> None:
+    def rem_entry(self, link: str) -> None:
         with UseDatabase(self.dbconfig) as cursor:
-            _SQL = """DELETE FROM storage WHERE id = %s"""
-            cursor.execute(_SQL, (ident,))
+            _SQL = """DELETE FROM storage WHERE link = %s"""
+            cursor.execute(_SQL, (link,))
